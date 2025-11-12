@@ -1,0 +1,59 @@
+/* 
+ * 🏗️ [Root build.gradle]
+ * PayLab 전체 프로젝트의 루트 빌드 스크립트
+ * - 모든 모듈(api, core, common)에 공통 설정 적용
+ * - 버전/리포지토리 관리
+ * - 공통 dependency 관리(Lombok, Test 등)
+ * - 개별 모듈에서는 비즈니스별 라이브러리만 선언
+ */
+
+plugins {
+	// Spring Boot 의존성 관리용 플러그인 (Boot BOM, 버전 일관성 제공)
+	id 'io.spring.dependency-management' version '1.1.4'
+
+	// Spring Boot 플러그인 (애플리케이션 실행/패키징용)
+	// => 루트에서는 apply false (하위 모듈에서만 적용)
+	id 'org.springframework.boot' version '3.3.2' apply false
+}
+
+/*
+ * 🧩 [allprojects 블록]
+ * - 루트 포함 모든 하위 프로젝트 공통 설정
+ * - group / version / repositories 등의 공통 속성 지정
+ */
+allprojects {
+	group = 'dev.dyko.paylab'       // 패키지 네임스페이스 (ex. dev.dyko.paylab.core)
+	version = '1.0.0'      			// 전체 버전 (공통)
+
+	repositories {
+		mavenCentral() 				// 의존성 다운로드 위치 (기본 Maven 중앙 저장소)
+	}
+}
+
+/*
+ * 🧱 [subprojects 블록]
+ * - 루트를 제외한 하위 모듈(paylab-api, paylab-core, paylab-common)에만 적용됨
+ * - 코드 레벨 공통 설정 (Lombok, JUnit 등)
+ */
+subprojects {
+	// 각 모듈이 라이브러리로 동작하도록 지정 (api는 boot plugin 따로 적용)
+	apply plugin: 'io.spring.dependency-management'
+
+	plugins.withType(JavaPlugin) {
+		java {
+			toolchain { languageVersion = JavaLanguageVersion.of(21) }
+		}
+
+		// 하위 모듈에서 Java plugin이 명시적으로 적용된 경우만 적용됨
+		dependencies {
+			compileOnly 'org.projectlombok:lombok'
+			annotationProcessor 'org.projectlombok:lombok'
+			testCompileOnly 'org.projectlombok:lombok'
+			testAnnotationProcessor 'org.projectlombok:lombok'
+			testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		}
+
+		tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+		tasks.withType(Test) { useJUnitPlatform() }
+	}
+}

@@ -1,0 +1,3 @@
+rootProject.name = 'paylab'
+
+include('paylab-common', 'paylab-core', 'paylab-api')

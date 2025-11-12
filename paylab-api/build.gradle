@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':paylab-core')
+    implementation project(':paylab-common')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'    // JWT 토큰 인증 추후 적용
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+}
