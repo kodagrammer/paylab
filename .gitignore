@@ -37,3 +37,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 계정정보 ###
+.env
+db-config.properties
