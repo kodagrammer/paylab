@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS paylab.api_call_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'PK',
+
+    api_name VARCHAR(200) NOT NULL COMMENT 'API 이름 또는 엔드포인트',
+    http_method VARCHAR(10) NOT NULL COMMENT 'GET, POST, PUT, DELETE 등',
+    request_uri VARCHAR(500) NOT NULL COMMENT '전체 URI path',
+
+    http_status INT NOT NULL COMMENT 'HTTP 상태 코드',
+    success TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1: 성공, 0: 실패',
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '로그 생성 시간'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

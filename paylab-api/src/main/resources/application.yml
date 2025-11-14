@@ -1,6 +1,25 @@
+# 공통 설정
 spring:
   application:
     name: paylab-api
 
+---
+# IDE(local) 프로파일
+spring:
+  config:
+    activate:
+      on-profile: local
+
+server:
+  port: 8081
+
+---
+# Docker 프로파일
+spring:
+  config:
+    activate:
+      on-profile: docker
+
 server:
   port: 8080
+  address: 0.0.0.0

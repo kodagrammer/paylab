@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8
+    container_name: paylab-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ}
+    command:
+      - --lower_case_table_names=1
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      - ../db/data:/var/lib/mysql
+      - ../db/init:/docker-entrypoint-initdb.d
+
+#  TODO: REDIS 적용 시, 설정
+#  redis:
+#    image: redis:latest
+#    container_name: paylab-redis
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - ../redis/redis.conf:/usr/local/etc/redis/redis.conf
+#    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+
+  api:
+    build:
+      context: ../../
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: paylab-api
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      TZ: ${TZ}
+    ports:
+      - "${API_PORT}:8080"
+    depends_on:
+      - db

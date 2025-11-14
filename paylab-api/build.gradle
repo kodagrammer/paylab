@@ -3,6 +3,10 @@ plugins {
     id 'org.springframework.boot'
 }
 
+jar {
+    enabled = false // plain jar 생성 막기
+}
+
 dependencies {
     implementation project(':paylab-core')
     implementation project(':paylab-common')

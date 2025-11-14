@@ -55,5 +55,20 @@ subprojects {
 
 		tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 		tasks.withType(Test) { useJUnitPlatform() }
+
+		// 🔹 멀티모듈 bootJar 설정
+		def bootModules = ['paylab-api']  // 실행 가능한 모듈만 지정
+		tasks.withType(org.springframework.boot.gradle.tasks.bundling.BootJar).configureEach {
+			if (project.name in bootModules) {
+				// 실행 모듈이면 mainClass 지정
+				mainClass.set('dev.dyko.paylab.PayLabApiApplication')
+			} else {
+				// 라이브러리 모듈이면 bootJar 비활성화
+				enabled = false
+			}
+		}
+
+		// 🔹 모든 모듈에서 일반 Jar 활성화
+		tasks.named('jar') { enabled = true }
 	}
 }

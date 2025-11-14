@@ -38,6 +38,7 @@ out/
 ### VS Code ###
 .vscode/
 
-### 계정정보 ###
-.env
+### 설정정보 ###
+infra/docker/.env
 db-config.properties
+/infra/db/data/
