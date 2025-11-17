@@ -2,6 +2,26 @@
 spring:
   application:
     name: paylab-api
+  config:
+    import: classpath:db-config.properties
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: HikariCP
+      connection-test-query: SELECT 'paylab-mysql'
+      initialization-fail-timeout: 5000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
 
 ---
 # IDE(local) 프로파일
@@ -9,9 +29,19 @@ spring:
   config:
     activate:
       on-profile: local
+  datasource:
+    url: ${database.url.local}
+    username: ${database.username}
+    password: ${database.password}
 
 server:
   port: 8081
+
+logging:
+  level:
+    com.p6spy: info
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
 
 ---
 # Docker 프로파일
@@ -19,7 +49,17 @@ spring:
   config:
     activate:
       on-profile: docker
+  datasource:
+    url: ${database.url.docker}
+    username: ${database.username}
+    password: ${database.password}
 
 server:
   port: 8080
   address: 0.0.0.0
+
+logging:
+  level:
+    com.p6spy: info
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace

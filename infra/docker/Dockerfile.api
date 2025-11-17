@@ -3,7 +3,7 @@ WORKDIR /app
 
 # 멀티모듈 Gradle 빌드
 COPY . .
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean build -x test --no-build-cache
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
